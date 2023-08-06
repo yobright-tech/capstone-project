@@ -1,19 +1,31 @@
 import React, {useState} from 'react'
-import { useNavigate} from 'react-router-dom'
+import { Link, useNavigate} from 'react-router-dom';
+import { BiSolidUser } from 'react-icons/bi';
+import { MdEmail } from 'react-icons/md';
+import { HiPhone } from 'react-icons/hi';
+import { FaUnlock } from 'react-icons/fa';
+
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 
 
 export default function Register({}) {
 
     const navigate = useNavigate();
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState('')
+    
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+      }
 
     const handleSubmit = async(e) => {
         e.preventDefault();
 
         //! faill fast. If username and password does not match, then throw err. 
-        if(!username || !password) {
+        if(!email || !email) {
             setError('Please fill the fields');
             return;
         }
@@ -32,7 +44,7 @@ export default function Register({}) {
         }
 
         const newUser = {
-            username, password
+            email, password
         }
             //setItem is 1 of the 4 properties of localStorage.
             //JSON.stringify helps to structure data verywell.
@@ -46,22 +58,50 @@ export default function Register({}) {
 
   return (
     <div className='Register'>
-      <h2>Register</h2>
+      <h1>Create an account</h1>
       <form onSubmit={handleSubmit}>
-        <input 
-            type="text"
-            placeholder='Usename'
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+      <div>
+            <div className='user'><MdEmail /></div>
+            <input 
+            type="email"
+            placeholder='Email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
         />
+        </div>
+        
+        <div>
+            <div className='user'><FaUnlock /></div>
+            <div className='user2' onClick={togglePasswordVisibility}>{showPassword ? <MdVisibilityOff /> : <MdVisibility />}</div>
         <input 
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             placeholder='Password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
         />
+        </div>
+        <div>
+
+            
+        <div className='user'><FaUnlock /></div>
+            <div className='user2' onClick={togglePasswordVisibility}>{showPassword ? <MdVisibilityOff /> : <MdVisibility />}</div>
+        <input 
+            type={showPassword ? 'text' : 'password'}
+            placeholder='Confirm Password'
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            
+        />
+        </div>
         {error && <p>{error}</p>}
         <button type='submit'>Register</button>
+        <div className='register-link'>
+            <p><Link to='login'>Tregister as a farmer</Link></p>
+        </div>
+        <div className='register-link'>
+            <p>Have an account? <Link to='login'>Login</Link></p>
+        </div>
+        
       </form>
     </div>
   )

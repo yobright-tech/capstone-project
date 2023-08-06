@@ -1,17 +1,29 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { FaUnlock } from 'react-icons/fa';
+import { MdEmail } from 'react-icons/md';
+import { BiSolidUser } from 'react-icons/bi';
+import { HiPhone } from 'react-icons/hi';
+
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 
 export default function Login({onLogin}) {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
   
   //Must be Default
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(!username || !password) {
+    if(!email || !password) {
       setError("Please fill in all fields");
       return;
     }
@@ -41,22 +53,28 @@ export default function Login({onLogin}) {
     <div className="Login">
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          placeholder="Email"
-          value={username}
-          required
-          onChange={(e) => setUsername(e.target.value)}
+      <div>
+            <div className='user'><MdEmail /></div>
+            <input 
+            type="email"
+            placeholder='Email'
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
         />
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
+        </div>
+        <div>
+        <div className='user'><FaUnlock /></div>
+        <div className='user2' onClick={togglePasswordVisibility}>{showPassword ? <MdVisibilityOff /> : <MdVisibility />}</div>
+          <input
+          type={showPassword ? 'text' : 'password'}
           placeholder="Password"
           value={password}
           required
           onChange={(e) => setPassword(e.target.value)}
         />
+
+        </div>
 
         {error && <p>{error}</p>}
         <button type="submit">Login</button>
